@@ -1,0 +1,19 @@
+//
+//  Prefix header
+//
+//  The contents of this file are implicitly included at the beginning of every source file.
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_3_0
+#warning "This project uses features only available in iOS SDK 3.0 and later."
+#endif
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+#endif
+#define AppStorURL @"https://itunes.apple.com/us/app/she-ji-zhu-li/id844768379?ls=1&mt=8"
+#define Screen_height   [[UIScreen mainScreen] bounds].size.height
+#define Screen_width    [[UIScreen mainScreen] bounds].size.width
