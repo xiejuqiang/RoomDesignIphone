@@ -27,6 +27,7 @@
 }
 
 @property (nonatomic,retain)NSArray *urlArray;
+@property (nonatomic,retain)NSString *titleName;
 @property (nonatomic,assign) int offset_H;
 @property (nonatomic,assign) BOOL isForeign;
 @property (nonatomic)int cat_id;

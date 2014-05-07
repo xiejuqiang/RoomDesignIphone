@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		18327089191A1FC600AE84E1 /* imageDefault@2x 2.png in Resources */ = {isa = PBXBuildFile; fileRef = 18327087191A1FC600AE84E1 /* imageDefault@2x 2.png */; };
+		1832708A191A1FC600AE84E1 /* imageDefault@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18327088191A1FC600AE84E1 /* imageDefault@2x.png */; };
+		1832708E191A363800AE84E1 /* logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1832708D191A363800AE84E1 /* logo.jpg */; };
 		18649DDF18FCC9B200CAE6A2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18649DDE18FCC9B200CAE6A2 /* Foundation.framework */; };
 		18649DE118FCC9B200CAE6A2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18649DE018FCC9B200CAE6A2 /* CoreGraphics.framework */; };
 		18649DE318FCC9B200CAE6A2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18649DE218FCC9B200CAE6A2 /* UIKit.framework */; };
@@ -69,6 +72,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		18327084191A12F200AE84E1 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		18327085191A130700AE84E1 /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
+		18327086191A131B00AE84E1 /* icon120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon120.png; sourceTree = "<group>"; };
+		18327087191A1FC600AE84E1 /* imageDefault@2x 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "imageDefault@2x 2.png"; sourceTree = "<group>"; };
+		18327088191A1FC600AE84E1 /* imageDefault@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "imageDefault@2x.png"; sourceTree = "<group>"; };
+		1832708D191A363800AE84E1 /* logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logo.jpg; sourceTree = "<group>"; };
 		18649DDB18FCC9B200CAE6A2 /* RoomDesignIphone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RoomDesignIphone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		18649DDE18FCC9B200CAE6A2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		18649DE018FCC9B200CAE6A2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -321,6 +330,12 @@
 		18649E3E18FCCCA800CAE6A2 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				1832708D191A363800AE84E1 /* logo.jpg */,
+				18327087191A1FC600AE84E1 /* imageDefault@2x 2.png */,
+				18327088191A1FC600AE84E1 /* imageDefault@2x.png */,
+				18327086191A131B00AE84E1 /* icon120.png */,
+				18327085191A130700AE84E1 /* icon@2x.png */,
+				18327084191A12F200AE84E1 /* icon.png */,
 				18B926CE1918EE0D005BA688 /* about5.jpg */,
 				18B926CF1918EE0D005BA688 /* about4.jpg */,
 				18B926D01918EE0D005BA688 /* about4@2x.jpg */,
@@ -467,8 +482,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1832708A191A1FC600AE84E1 /* imageDefault@2x.png in Resources */,
 				18B926D31918EE0D005BA688 /* about4.jpg in Resources */,
 				18B926D41918EE0D005BA688 /* about4@2x.jpg in Resources */,
+				18327089191A1FC600AE84E1 /* imageDefault@2x 2.png in Resources */,
+				1832708E191A363800AE84E1 /* logo.jpg in Resources */,
 				18B926D51918EE0D005BA688 /* about5@2x.jpg in Resources */,
 				18649DE918FCC9B200CAE6A2 /* InfoPlist.strings in Resources */,
 				18B926D21918EE0D005BA688 /* about5.jpg in Resources */,

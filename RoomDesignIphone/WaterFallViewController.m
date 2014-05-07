@@ -250,14 +250,15 @@
     [backButton addTarget:self action:@selector(more) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:backButton];
     
-    UILabel *titleLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(445-320, 30, 50, 30)];
+    UILabel *titleLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(425-320, 30, 50, 30)];
     titleLabel1.text = @"设计";
     titleLabel1.textAlignment = NSTextAlignmentCenter;
     titleLabel1.textColor = [UIColor blackColor];
     
-    UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon.png"]];
-    imgView.frame = CGRectMake(titleLabel1.right-7, 20, 40, 40);
+    UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(titleLabel1.right-7, 25, 30, 30)];
+    imgView.image = [UIImage imageNamed:@"logo.jpg"];
     
+    [self.view addSubview:imgView];
     
     UILabel *titleLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(425+65-320, 30, 50, 30)];
     titleLabel2.text = @"助理";
@@ -279,7 +280,6 @@
     titleLabel2.font = font;
     collectButton.titleLabel.font = font;
     
-    NSArray *englishName = [[NSArray alloc] initWithObjects:@"Office",@"Household",@"Recreation",@"Retail",@"Hotel",@"Food",@"Treatment", nil];
     
     titleScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(5, lineLabel.top-33, 320-10, 33)];
     titleScrollView.delegate = self;
@@ -303,32 +303,14 @@
         cookLabel.titleLabel.font = [UIFont systemFontOfSize:14.0];
         //        [cookLabel addTarget:self action:@selector(categoryTap:) forControlEvents:UIControlEventTouchUpInside];
         [titleScrollView addSubview:cookLabel];
-        if (isForeign) {
-            cookLabel.frame = CGRectMake(30+(i+1)*331, 0, 90, 30);
-            flagLine.frame = CGRectMake(20+311+80, titleScrollView.top+30, 100, 3);
-            //            cookLabel.text = [englishName objectAtIndex:i];
-            [cookLabel setTitle:[englishName objectAtIndex:i] forState:UIControlStateNormal];
-        }
+        
     }
     
-    if (isForeign == YES) {
-        titleLabel1.text = @"Design";
-        titleLabel2.text = @"Assistant";
-        
-        [backButton setTitle:@"back" forState:UIControlStateNormal];
-        
-        
-        titleLabel1.frame = CGRectMake(445, 30, 60, 30);
-        imgView.frame = CGRectMake(titleLabel1.right-10, 10, 50, 50);
-        titleLabel2.frame = CGRectMake(titleLabel1.right-10+40, 30, 70, 30);
-        //        houseLabel.frame = CGRectMake(425+60, lineLabel.top-30, 100, 30);
-        //        officeLabel.frame = CGRectMake(lineLabel.right -100, lineLabel.top -30, 100, 30);
-        
-    }
+    
     
     [self.view addSubview:titleLabel1];
     [self.view addSubview:titleLabel2];
-    [self.view addSubview:imgView];
+//    [self.view addSubview:imgView];
     
 }
 
@@ -344,11 +326,15 @@
         }
         
         
-        WaterFallDetailViewController *waterVC = [[WaterFallDetailViewController alloc] init];
-        waterVC.isCollect = YES;
-        waterVC.urlArray = myTempArray;
-        waterVC.offset_H = 0;
-        [self.navigationController pushViewController:waterVC animated:YES];
+//        WaterFallDetailViewController *waterVC = [[WaterFallDetailViewController alloc] init];
+//        waterVC.isCollect = YES;
+//        waterVC.urlArray = myTempArray;
+//        waterVC.offset_H = 0;
+//        [self.navigationController pushViewController:waterVC animated:YES];
+        CollectViewController *collectVC = [[CollectViewController alloc] init];
+        collectVC.imageArr = resultItem;
+        collectVC.categoryId = [[[dataArray objectAtIndex:cat_id-1] objectForKey:@"id"] intValue];
+        [self.navigationController pushViewController:collectVC animated:YES];
     }
     else
     {
@@ -658,11 +644,14 @@
 - (void)quiltView:(TMQuiltView *)quiltView didSelectCellAtIndexPath:(NSIndexPath *)indexPath
 {
 	NSLog(@"index:%d",indexPath.row);
+    NSDictionary *proDic = [self.images objectAtIndex:indexPath.row];
+    NSString *titleName = [proDic objectForKey:@"sdesc"];
     WaterFallDetailViewController *waterFallDetailVC = [[WaterFallDetailViewController alloc] init];
     waterFallDetailVC.offset_H = indexPath.row;
     waterFallDetailVC.cat_id = [[[dataArray objectAtIndex:cat_id-1] objectForKey:@"id"] intValue];
     waterFallDetailVC.urlArray = img_str_array;
     waterFallDetailVC.isForeign = self.isForeign;
+    waterFallDetailVC.titleName = titleName;
     
     [self.navigationController pushViewController:waterFallDetailVC animated:YES];
 }

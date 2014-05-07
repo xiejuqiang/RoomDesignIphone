@@ -36,6 +36,7 @@
 @synthesize isForeign;
 @synthesize cat_id = _cat_id;
 @synthesize isCollect;
+@synthesize titleName = _titleName;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -72,6 +73,7 @@
     NSDictionary *resultDicData = [jsonP getItems];
     productsData = [[NSArray alloc] initWithArray:[resultDicData objectForKey:@"productLists"]];
     [self createView:offset_H];
+    [self createTopView];
 }
 
 - (void)onConnectionError
@@ -99,7 +101,7 @@
     {
         offset_H = offset_H%10;
         [self getData];
-        [self createTopView];
+        
     }
     
     
@@ -110,70 +112,62 @@
 - (void)createTopView
 {
     
+    UIFont *font = [UIFont systemFontOfSize:14.0];
     
-    UILabel *titleLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(445-320, 30, 50, 30)];
+    UIView *whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
+    whiteView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:whiteView];
+    
+    UILabel *titleLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(425-320, 30, 50, 30)];
     titleLabel1.text = @"设计";
     titleLabel1.textAlignment = NSTextAlignmentCenter;
     titleLabel1.textColor = [UIColor blackColor];
+    titleLabel1.font = font;
     
-    UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon.png"]];
-    imgView.frame = CGRectMake(titleLabel1.right-7, 20, 40, 40);
+    UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(titleLabel1.right-7, 25, 30, 30)];
+    imgView.image = [UIImage imageNamed:@"logo.jpg"];
+    
+    [whiteView addSubview:imgView];
     
     
     UILabel *titleLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(425+65-320, 30, 50, 30)];
     titleLabel2.text = @"助理";
     titleLabel2.textAlignment = NSTextAlignmentCenter;
     titleLabel2.textColor = [UIColor blackColor];
+    titleLabel2.font = font;
     
+
     UILabel *lineLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 90, 320-10, 2)];
     lineLabel.backgroundColor = [UIColor blackColor];
-    [self.view addSubview:lineLabel];
+    [whiteView addSubview:lineLabel];
     
-    //    UILabel *cookLabel = [[UILabel alloc] initWithFrame:CGRectMake(90, lineLabel.top-30, 90, 30)];
-    //    cookLabel.text = @"现代风格";
-    //    cookLabel.textAlignment = NSTextAlignmentCenter;
-    //    cookLabel.textColor = [UIColor blackColor];
-    //
-    //    UILabel *houseLabel = [[UILabel alloc] initWithFrame:CGRectMake(425+60, lineLabel.top-30, 90, 30)];
-    //    houseLabel.text = @"欧式风格";
-    //    houseLabel.textAlignment = NSTextAlignmentCenter;
-    //    houseLabel.textColor = [UIColor blackColor];
-    //
-    //    UILabel *officeLabel = [[UILabel alloc] initWithFrame:CGRectMake(904-90, lineLabel.top-30, 90, 30)];
-    //    officeLabel.text = @"田园风格";
-    //    officeLabel.textAlignment = NSTextAlignmentCenter;
-    //    officeLabel.textColor = [UIColor blackColor];
+    UILabel *titleNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 25)];
+    titleNameLabel.bottom = lineLabel.top-2;
+    titleNameLabel.text = _titleName;
+    titleNameLabel.textAlignment = NSTextAlignmentCenter;
+    titleNameLabel.textColor = [UIColor blackColor];
+    titleNameLabel.font = font;
+    [whiteView addSubview:titleNameLabel];
     
-    if (isForeign) {
-        titleLabel1.text = @"Design";
-        titleLabel2.text = @"Assistant";
-        //        cookLabel.text = @"Smartness";
-        //        houseLabel.text = @"European";
-        //        officeLabel.text = @"Rural";
-        
-        titleLabel1.frame = CGRectMake(445, 30, 60, 30);
-        imgView.frame = CGRectMake(titleLabel1.right-10, 10, 50, 50);
-        titleLabel2.frame = CGRectMake(titleLabel1.right-10+40, 30, 70, 30);
-    }
     
-    [self.view addSubview:titleLabel1];
-    [self.view addSubview:titleLabel2];
-    //    [self.view addSubview:cookLabel];
-    //    [self.view addSubview:houseLabel];
-    //    [self.view addSubview:officeLabel];
-    [self.view addSubview:imgView];
+    
+    [whiteView addSubview:titleLabel1];
+    [whiteView addSubview:titleLabel2];
+
     
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 30, 50, 30)];
     [backButton setTitle:@"返回" forState:UIControlStateNormal];
     [backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:backButton];
+    [whiteView addSubview:backButton];
+    backButton.titleLabel.font = font;
     if (isCollect) {
         UIButton *clearUpButton = [[UIButton alloc] initWithFrame:CGRectMake(320-70, 30, 60, 30)];
         [clearUpButton setTitle:@"清除" forState:UIControlStateNormal];
         [clearUpButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [clearUpButton addTarget:self action:@selector(clearTap) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:clearUpButton];
+        [whiteView addSubview:clearUpButton];
+        clearUpButton.titleLabel.font = font;
     }
     else
     {
@@ -181,14 +175,11 @@
         [collectButton setTitle:@"收藏" forState:UIControlStateNormal];
         [collectButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [collectButton addTarget:self action:@selector(collectItem:) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:collectButton];
+        [whiteView addSubview:collectButton];
+        collectButton.titleLabel.font = font;
     }
     
-    //
-    //    if (isForeign) {
-    //        [backButton setTitle:@"back" forState:UIControlStateNormal];
-    //        [collectButton setTitle:@"collect" forState:UIControlStateNormal];
-    //    }
+
 }
 
 - (void)clearTap
@@ -222,44 +213,17 @@
 
 - (void)createView:(int)nId
 {
-    leftScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(5, 120, 250, Screen_height-120)];
+    leftScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(5, 100, 310, Screen_height-170)];
     leftScrollView.tag = 100;
     leftScrollView.delegate = self;
     leftScrollView.pagingEnabled = YES;
+    leftScrollView.clipsToBounds = NO;
+    leftScrollView.maximumZoomScale = 3.0;
+    leftScrollView.minimumZoomScale = 1.0;
     [self.view addSubview:leftScrollView];
-    
-    rightScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(260, 120, 320-265, Screen_height-120)];
-    rightScrollView.tag = 200;
-    rightScrollView.delegate = self;
-    [self.view addSubview:rightScrollView];
-    
-    bgTileView = [[UIView alloc] initWithFrame:CGRectMake(0, 166.5*offset_H, 183, 180)];
-    bgTileView.backgroundColor = [UIColor grayColor];
-    [rightScrollView addSubview:bgTileView];
-    
-    int offsetH = 0;
+
     int left_offsetH = 0;
-    for (int i = 0; i<[productsData count]; i++)
-    {
-        //        NSString *imagePath = [[NSString alloc] initWithFormat:@"%@",[urlArray objectAtIndex:i]];
-        //        NSString* cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-        //        NSString *imagePath1 = [[[[cachesDirectory stringByAppendingPathComponent:[[NSProcessInfo processInfo] processName]] stringByAppendingPathComponent:@"EGOCache"] copy] stringByAppendingPathComponent:[NSString stringWithFormat:@"EGOImageLoader-%u", [[imagePath description] hash]]];
-        //        NSLog(@"%u",[[imagePath description] hash]);
-        EGOImageView *imageView = [[EGOImageView alloc] init];
-        imageView.userInteractionEnabled = YES;
-        imageView.frame = CGRectMake(5+10, 13.5+(162+4.5)*i, 161-8, 161-8);
-        imageView.imageURL = [[NSURL alloc] initWithString:[[productsData objectAtIndex:i] objectForKey:@"image1"]];
-        imageView.contentMode = UIViewContentModeScaleToFill;
-        imageView.backgroundColor = [UIColor whiteColor];
-        [rightScrollView addSubview:imageView];
-        offsetH = imageView.frame.origin.y;
-        
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapBg:)];
-        [imageView addGestureRecognizer:tap];
-        tap.view.tag = 100+i;
-        
-    }
-    
+
     NSArray *imagesArray = [[productsData objectAtIndex:offset_H] objectForKey:@"image_array"];
     NSMutableArray *imgArr = [[NSMutableArray alloc] init];
     for (NSString *str in imagesArray) {
@@ -274,24 +238,17 @@
         imageViewBig.isUse = NO;
         imageViewBig.clipsToBounds = YES;
         imageViewBig.contentMode = UIViewContentModeScaleAspectFill;
-        imageViewBig.frame = CGRectMake(0, 600*j, 720+70, 600);
+        imageViewBig.frame = CGRectMake(0, 10+(Screen_height-170)*j, 310, Screen_height-180);
         imageViewBig.imageURL = [[NSURL alloc] initWithString:[imgArr objectAtIndex:j]];
         [imgViewTempArray addObject:imageViewBig];
         [leftScrollView addSubview:imageViewBig];
         left_offsetH = imageViewBig.frame.origin.y;
-        
+        imageViewBig.layer.borderWidth = 0.5;
+        imageViewBig.layer.borderColor = [UIColor blackColor].CGColor;
     }
     
-    rightScrollView.contentSize = CGSizeMake(183, offsetH+161);
-    if ([productsData count]<4) {
-        rightScrollView.contentOffset = CGPointMake(0, 0);
-    }
-    else
-    {
-        rightScrollView.contentOffset = CGPointMake(0, 162*offset_H);
-    }
     
-    leftScrollView.contentSize = CGSizeMake(720+70, left_offsetH+600);
+    leftScrollView.contentSize = CGSizeMake(310, left_offsetH+Screen_height-170);
     leftScrollView.contentOffset = CGPointMake(0, 0);
     
 }
@@ -359,8 +316,8 @@
             
         }
     }
-    
-    NSArray *collectClosArray = [[NSArray alloc] initWithObjects:[[tempArray objectAtIndex:0] objectForKey:@"id"], [[tempArray objectAtIndex:0] objectForKey:@"image1"],str,nil];
+    NSString *offset = [NSString stringWithFormat:@"%d",offset_H];
+    NSArray *collectClosArray = [[NSArray alloc] initWithObjects:offset, [[tempArray objectAtIndex:0] objectForKey:@"image1"],str,nil];
     BOOL tips = NO;
     for (CollectDBItem *item in [recordDB resultSet:COLLECT_TABLENAME Order:nil LimitCount:0]) {
         if ([[collectClosArray objectAtIndex:0] isEqualToString:item.catid]) {
@@ -383,20 +340,20 @@
     }
     
     
-    WaterFallDetailViewController *waterVC = [[WaterFallDetailViewController alloc] init];
-    waterVC.isCollect = YES;
-    waterVC.urlArray = myTempArray;
-    waterVC.offset_H = 0;
-    [self.navigationController pushViewController:waterVC animated:YES];
+//    WaterFallDetailViewController *waterVC = [[WaterFallDetailViewController alloc] init];
+//    waterVC.isCollect = YES;
+//    waterVC.urlArray = myTempArray;
+//    waterVC.offset_H = 0;
+//    [self.navigationController pushViewController:waterVC animated:YES];
     
-    //    NSArray *collectClosArray = [[NSArray alloc] initWithObjects:[NSString stringWithFormat:@"%d",offset_H], [urlArray objectAtIndex:offset_H],nil];
-    //    [recordDB insertAtTable:COLLECT_TABLENAME Clos:collectClosArray];
-    //    NSArray *resultItem = [recordDB resultSet:COLLECT_TABLENAME Order:nil LimitCount:0];
-    //    CollectViewController *collectVC = [[CollectViewController alloc] init];
-    //    collectVC.imageArr = resultItem;
-    //    [self.navigationController pushViewController:collectVC animated:YES];
-    //    CollectDBItem *item = [resultItem objectAtIndex:0];
-    //   NSString *imagePath =item.thumb;
+    
+    
+        CollectViewController *collectVC = [[CollectViewController alloc] init];
+        collectVC.imageArr = resultItem;
+        collectVC.categoryId = _cat_id;
+        [self.navigationController pushViewController:collectVC animated:YES];
+    
+    
     
     
 }
@@ -441,15 +398,19 @@
     
     if (scrollView.tag == 100)
     {
-        //        int offsetY = scrollView.contentOffset.y/600;
-        //        bgTileView.frame = CGRectMake(0, 166.5*offsetY, 183, 180);
-        //        rightScrollView.contentOffset = CGPointMake(0, 162*offsetY);
+       
         
     }
     else if (scrollView.tag == 200)
     {
         
     }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+//    int offsetY = scrollView.contentOffset.y/(Screen_height-100);
+//    scrollView.contentOffset = CGPointMake(0, offsetY*(Screen_height-180));
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

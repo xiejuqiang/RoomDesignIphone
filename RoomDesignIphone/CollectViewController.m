@@ -28,6 +28,7 @@
 @implementation CollectViewController
 @synthesize images = _images;
 @synthesize imageArr;
+@synthesize categoryId = _categoryId;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -43,19 +44,21 @@
 {
     [super viewDidLoad];
     [self createTopView];
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(5, 10, 50, 30)];
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(5, 30, 50, 30)];
     [backButton setTitle:@"返回" forState:UIControlStateNormal];
     [backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:backButton];
+    backButton.titleLabel.font = [UIFont systemFontOfSize:14.0];
     
-    UIButton *collectButton = [[UIButton alloc] initWithFrame:CGRectMake(1024-70, 30, 60, 30)];
+    UIButton *collectButton = [[UIButton alloc] initWithFrame:CGRectMake(320-65, 30, 60, 30)];
     [collectButton setTitle:@"清除" forState:UIControlStateNormal];
     [collectButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [collectButton addTarget:self action:@selector(clearTap) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:collectButton];
+    collectButton.titleLabel.font = [UIFont systemFontOfSize:14.0];
     
-    qtmquitView = [[TMQuiltView alloc] initWithFrame:CGRectMake(60, 100, 1024-120, 768-100)];
+    qtmquitView = [[TMQuiltView alloc] initWithFrame:CGRectMake(5, 100, 310, Screen_height-100)];
     qtmquitView.delegate = self;
     qtmquitView.dataSource = self;
     [self.view addSubview:qtmquitView];
@@ -67,27 +70,32 @@
 
 - (void)createTopView
 {
-    UILabel *lineLabel = [[UILabel alloc] initWithFrame:CGRectMake(60, 90, 1024-120, 2)];
+    UIFont *font = [UIFont systemFontOfSize:14.0];
+    UILabel *lineLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 90, 320-10, 2)];
     lineLabel.backgroundColor = [UIColor blackColor];
     [self.view addSubview:lineLabel];
     
-    UILabel *titleLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(445, 30, 50, 30)];
+    UILabel *titleLabel1 = [[UILabel alloc] initWithFrame:CGRectMake(425-320, 30, 50, 30)];
     titleLabel1.text = @"设计";
     titleLabel1.textAlignment = NSTextAlignmentCenter;
     titleLabel1.textColor = [UIColor blackColor];
+    titleLabel1.font = font;
     
-    UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"icon.png"]];
-    imgView.frame = CGRectMake(titleLabel1.right-10, 20, 40, 40);
+    UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(titleLabel1.right-7, 25, 30, 30)];
+    imgView.image = [UIImage imageNamed:@"logo.jpg"];
+    
+    [self.view addSubview:imgView];
     
     
-    UILabel *titleLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(425+30+65, 30, 50, 30)];
-    titleLabel2.text = @"助手";
+    UILabel *titleLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(425+65-320, 30, 50, 30)];
+    titleLabel2.text = @"助理";
     titleLabel2.textAlignment = NSTextAlignmentCenter;
     titleLabel2.textColor = [UIColor blackColor];
+    titleLabel2.font = font;
     
     [self.view addSubview:titleLabel1];
     [self.view addSubview:titleLabel2];
-    [self.view addSubview:imgView];
+ 
 }
 
 - (void)clearTap
@@ -312,7 +320,7 @@
 	{
         return 3;
     } else {
-        return 5;
+        return 3;
     }
 }
 
@@ -330,7 +338,8 @@
     NSString *catID = item.catid;
     WaterFallDetailViewController *waterFallDetailVC = [[WaterFallDetailViewController alloc] init];
     waterFallDetailVC.offset_H = [catID intValue];
-    waterFallDetailVC.urlArray = imageArr;
+    waterFallDetailVC.cat_id = _categoryId;
+    waterFallDetailVC.urlArray = [item.imgArr componentsSeparatedByString:@","];
     [self.navigationController pushViewController:waterFallDetailVC animated:YES];
 }
 

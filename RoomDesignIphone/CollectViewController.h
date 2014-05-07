@@ -23,6 +23,6 @@
 }
 @property (nonatomic, retain) NSMutableArray *images;
 @property (nonatomic, retain) NSArray *imageArr;
-
+@property (nonatomic, assign) int categoryId;
 
 @end
