@@ -11,8 +11,9 @@
 @interface CollectDBItem : NSObject
 
 @property (nonatomic, retain) NSString *catid;
+@property (nonatomic, retain) NSString *offsetH;
 @property (nonatomic, retain) NSString *thumb;
 @property (nonatomic, retain) NSString *imgArr;
-
+@property (nonatomic, retain) NSString *titleName;
 - (void)initData:(NSArray *)dataArray;
 @end

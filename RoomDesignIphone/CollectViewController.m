@@ -36,6 +36,10 @@
     if (self) {
         // Custom initialization
         imageArr = [[NSArray alloc] init];
+        HUD = [[MBProgressHUD alloc] init];
+        recordDB = [[RecordDao alloc] init];
+        [recordDB createDB:DATABASE_NAME];
+        
     }
     return self;
 }
@@ -43,20 +47,28 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+   
     [self createTopView];
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(5, 30, 50, 30)];
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(5, 20, 50, 50)];
     [backButton setTitle:@"返回" forState:UIControlStateNormal];
     [backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:backButton];
-    backButton.titleLabel.font = [UIFont systemFontOfSize:14.0];
+    backButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
     
-    UIButton *collectButton = [[UIButton alloc] initWithFrame:CGRectMake(320-65, 30, 60, 30)];
+    UIButton *collectButton = [[UIButton alloc] initWithFrame:CGRectMake(320-65, 20, 60, 50)];
     [collectButton setTitle:@"清除" forState:UIControlStateNormal];
     [collectButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [collectButton addTarget:self action:@selector(clearTap) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:collectButton];
-    collectButton.titleLabel.font = [UIFont systemFontOfSize:14.0];
+    collectButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    
+    BOOL ios7 = [[[UIDevice currentDevice]systemVersion]floatValue] >= 7.0 ? YES : NO;
+    if (!ios7) {
+        backButton.top = 0;
+        collectButton.top = 0;
+        
+    }
     
     qtmquitView = [[TMQuiltView alloc] initWithFrame:CGRectMake(5, 100, 310, Screen_height-100)];
     qtmquitView.delegate = self;
@@ -70,7 +82,7 @@
 
 - (void)createTopView
 {
-    UIFont *font = [UIFont systemFontOfSize:14.0];
+    UIFont *font = [UIFont systemFontOfSize:16.0];
     UILabel *lineLabel = [[UILabel alloc] initWithFrame:CGRectMake(5, 90, 320-10, 2)];
     lineLabel.backgroundColor = [UIColor blackColor];
     [self.view addSubview:lineLabel];
@@ -84,8 +96,6 @@
     UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(titleLabel1.right-7, 25, 30, 30)];
     imgView.image = [UIImage imageNamed:@"logo.jpg"];
     
-    [self.view addSubview:imgView];
-    
     
     UILabel *titleLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(425+65-320, 30, 50, 30)];
     titleLabel2.text = @"助理";
@@ -93,16 +103,75 @@
     titleLabel2.textColor = [UIColor blackColor];
     titleLabel2.font = font;
     
+    BOOL ios7 = [[[UIDevice currentDevice]systemVersion]floatValue] >= 7.0 ? YES : NO;
+    if (!ios7) {
+        
+        titleLabel1.top = 10;
+        titleLabel2.top = 10;
+        imgView.top = 5;
+    }
+    
+    UILabel *titleNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 25)];
+    titleNameLabel.bottom = lineLabel.top-2;
+    titleNameLabel.text = @"收藏夹";
+    titleNameLabel.textAlignment = NSTextAlignmentCenter;
+    titleNameLabel.textColor = [UIColor blackColor];
+    titleNameLabel.font = font;
+    [self.view addSubview:titleNameLabel];
+    
     [self.view addSubview:titleLabel1];
     [self.view addSubview:titleLabel2];
+    [self.view addSubview:imgView];
  
 }
 
 - (void)clearTap
 {
-//    NSArray *resultItem = [recordDB deleteAtIndex:COLLECT_TABLENAME CloValue:0];
-//    self.images = [[NSMutableArray alloc] initWithArray:resultItem];
-//    [self getNextPageView];
+    NSArray *itemArray = [recordDB resultSet:COLLECT_TABLENAME Order:nil LimitCount:0];
+    if ([itemArray count]>0) {
+        UIAlertView *alertV = [[UIAlertView alloc] initWithTitle:@"是否清空收藏" message:nil delegate:self cancelButtonTitle:@"否" otherButtonTitles:@"是", nil];
+        [alertV show];
+    }
+    else
+    {
+        [self showWithTime:@"收藏无内容"];
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        
+    }
+    else
+    {
+        [recordDB deleteAtIndex:COLLECT_TABLENAME CloValue:0];
+        [self.images removeAllObjects];
+        [qtmquitView reloadData];
+        
+    }
+}
+
+#pragma mark showHud
+
+- (void)showWithTime:(NSString *)lable
+{
+    [self.view addSubview:HUD];
+    HUD.delegate = self;
+    HUD.labelText = lable;
+    [HUD showWhileExecutingT:@selector(myTask) onTarget:self withObject:nil animated:YES];
+}
+
+- (void)showWithLoding
+{
+    [self.view addSubview:HUD];
+    HUD.delegate = self;
+    HUD.labelText = @"加载中...";
+    [HUD showWhileExecuting:@selector(myTask) onTarget:self withObject:nil animated:YES];
+}
+- (void)myTask {
+	// Do something usefull in here instead of sleeping ...
+    sleep(1);
 }
 
 - (void)back
@@ -301,7 +370,7 @@
     if ([quiltView heightForCellAtIndexPath:indexPath]>0)
     {
         cell.titleLabel.hidden = NO;
-        cell.titleLabel.text = [NSString stringWithFormat:@"%d", indexPath.row];
+        cell.titleLabel.text = item.titleName;
     }
     else
     {
@@ -327,19 +396,20 @@
 - (CGFloat)quiltView:(TMQuiltView *)quiltView heightForCellAtIndexPath:(NSIndexPath *)indexPath
 {
     //    NSLog(@"%f",[self imageAtIndexPath:indexPath].size.height);
-    NSLog(@"page:%f",[self imageAtIndexPath:indexPath].frame.size.height+40);
-    return [self imageAtIndexPath:indexPath].frame.size.height+40;
+    return 100;
 }
 
 - (void)quiltView:(TMQuiltView *)quiltView didSelectCellAtIndexPath:(NSIndexPath *)indexPath
 {
 	NSLog(@"index:%d",indexPath.row);
     CollectDBItem *item = [self.images objectAtIndex:indexPath.row];
-    NSString *catID = item.catid;
+    NSString *offsetH = item.offsetH;
     WaterFallDetailViewController *waterFallDetailVC = [[WaterFallDetailViewController alloc] init];
-    waterFallDetailVC.offset_H = [catID intValue];
+    waterFallDetailVC.offset_H = [offsetH intValue];
     waterFallDetailVC.cat_id = _categoryId;
     waterFallDetailVC.urlArray = [item.imgArr componentsSeparatedByString:@","];
+    waterFallDetailVC.titleName = item.titleName;
+    waterFallDetailVC.isCollect = YES;
     [self.navigationController pushViewController:waterFallDetailVC animated:YES];
 }
 

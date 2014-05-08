@@ -14,6 +14,6 @@
 #define DATABASE_NAME @"RoomDesign.sqlite"
 //系统设置
 #define COLLECT_TABLENAME @"collect"
-#define COLLECT_CTEATE_SQL @"create table if not exists collect (catID Integer primary key,imgURL text not null,imgArr text not null)"
+#define COLLECT_CTEATE_SQL @"create table if not exists collect (catID Integer primary key,offsetH Integer,imgURL text not null,imgArr text not null,titleName text not null)"
 
 

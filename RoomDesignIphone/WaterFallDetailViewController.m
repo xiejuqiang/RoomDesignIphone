@@ -79,11 +79,13 @@
 - (void)onConnectionError
 {
     [self showWithTime:@"网络连接出错"];
+    [self createTopView];
 }
 
 - (void)onConnectionNull
 {
     [self showWithTime:@"暂无数据"];
+    [self createTopView];
 }
 
 - (void)viewDidLoad
@@ -92,17 +94,12 @@
 	// Do any additional setup after loading the view.
     pageNum = offset_H/10 +1;
     
-    if (isCollect == YES) {
-        productsData = urlArray;
-        [self createTopView];
-        [self createView:offset_H];
-    }
-    else
-    {
-        offset_H = offset_H%10;
-        [self getData];
+    
+    
+    offset_H = offset_H%10;
+    [self getData];
         
-    }
+    
     
     
     
@@ -112,7 +109,7 @@
 - (void)createTopView
 {
     
-    UIFont *font = [UIFont systemFontOfSize:14.0];
+    UIFont *font = [UIFont systemFontOfSize:16.0];
     
     UIView *whiteView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
     whiteView.backgroundColor = [UIColor whiteColor];
@@ -126,8 +123,6 @@
     
     UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(titleLabel1.right-7, 25, 30, 30)];
     imgView.image = [UIImage imageNamed:@"logo.jpg"];
-    
-    [whiteView addSubview:imgView];
     
     
     UILabel *titleLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(425+65-320, 30, 50, 30)];
@@ -153,30 +148,32 @@
     
     [whiteView addSubview:titleLabel1];
     [whiteView addSubview:titleLabel2];
-
+    [whiteView addSubview:imgView];
     
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 30, 50, 30)];
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 20, 50, 50)];
     [backButton setTitle:@"返回" forState:UIControlStateNormal];
     [backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
     [whiteView addSubview:backButton];
     backButton.titleLabel.font = font;
+   
+    UIButton *collectButton = [[UIButton alloc] initWithFrame:CGRectMake(320-70, 20, 60, 50)];
+    [collectButton setTitle:@"收藏" forState:UIControlStateNormal];
+    [collectButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [collectButton addTarget:self action:@selector(collectItem:) forControlEvents:UIControlEventTouchUpInside];
+    [whiteView addSubview:collectButton];
+    collectButton.titleLabel.font = font;
     if (isCollect) {
-        UIButton *clearUpButton = [[UIButton alloc] initWithFrame:CGRectMake(320-70, 30, 60, 30)];
-        [clearUpButton setTitle:@"清除" forState:UIControlStateNormal];
-        [clearUpButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [clearUpButton addTarget:self action:@selector(clearTap) forControlEvents:UIControlEventTouchUpInside];
-        [whiteView addSubview:clearUpButton];
-        clearUpButton.titleLabel.font = font;
+        collectButton.hidden = YES;
     }
-    else
-    {
-        UIButton *collectButton = [[UIButton alloc] initWithFrame:CGRectMake(320-70, 30, 60, 30)];
-        [collectButton setTitle:@"收藏" forState:UIControlStateNormal];
-        [collectButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [collectButton addTarget:self action:@selector(collectItem:) forControlEvents:UIControlEventTouchUpInside];
-        [whiteView addSubview:collectButton];
-        collectButton.titleLabel.font = font;
+    
+    BOOL ios7 = [[[UIDevice currentDevice]systemVersion]floatValue] >= 7.0 ? YES : NO;
+    if (!ios7) {
+        backButton.top = 0;
+        titleLabel1.top = 10;
+        titleLabel2.top = 10;
+        collectButton.top = 0;
+        imgView.top = 5;
     }
     
 
@@ -294,30 +291,10 @@
 {
     NSString *str = @"";
     NSMutableArray *tempArray = [[NSMutableArray alloc] init];
-    NSMutableArray *myTempArray =[[NSMutableArray alloc] init];
+//    NSMutableArray *myTempArray =[[NSMutableArray alloc] init];
     [tempArray addObject:[productsData objectAtIndex:offset_H]];
-    for (NSString *imgStr in [[tempArray objectAtIndex:0] objectForKey:@"image_array"]) {
-        str = [str stringByAppendingString:[imgStr stringByAppendingString:@","]];
-        if ([imgStr isEqualToString:@""] == NO) {
-            NSString* cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-            NSString *imagePath1 = [[[[cachesDirectory stringByAppendingPathComponent:[[NSProcessInfo processInfo] processName]] stringByAppendingPathComponent:@"EGOCache"] copy] stringByAppendingPathComponent:[NSString stringWithFormat:@"EGOImageLoader-%u", [[imgStr description] hash]]];
-            UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:imagePath1]];
-            ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
-            
-            [library writeImageToSavedPhotosAlbum:[imgView.image CGImage] orientation:(ALAssetOrientation)[imgView.image imageOrientation] completionBlock:^(NSURL *assetURL, NSError *error){
-                if (error) {
-                    // TODO: error handling
-                } else {
-                    // TODO: success handling
-                    NSLog(@"SUCCESS");
-                    
-                }
-            }];
-            
-        }
-    }
     NSString *offset = [NSString stringWithFormat:@"%d",offset_H];
-    NSArray *collectClosArray = [[NSArray alloc] initWithObjects:offset, [[tempArray objectAtIndex:0] objectForKey:@"image1"],str,nil];
+    NSArray *collectClosArray = [[NSArray alloc] initWithObjects:[[tempArray objectAtIndex:0] objectForKey:@"id"],offset, [[tempArray objectAtIndex:0] objectForKey:@"image1"],str,_titleName,nil];
     BOOL tips = NO;
     for (CollectDBItem *item in [recordDB resultSet:COLLECT_TABLENAME Order:nil LimitCount:0]) {
         if ([[collectClosArray objectAtIndex:0] isEqualToString:item.catid]) {
@@ -326,32 +303,44 @@
     }
     
     if (tips == NO) {
+        
+        for (NSString *imgStr in [[tempArray objectAtIndex:0] objectForKey:@"image_array"]) {
+            str = [str stringByAppendingString:[imgStr stringByAppendingString:@","]];
+            if ([imgStr isEqualToString:@""] == NO) {
+                NSString* cachesDirectory = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+                NSString *imagePath1 = [[[[cachesDirectory stringByAppendingPathComponent:[[NSProcessInfo processInfo] processName]] stringByAppendingPathComponent:@"EGOCache"] copy] stringByAppendingPathComponent:[NSString stringWithFormat:@"EGOImageLoader-%u", [[imgStr description] hash]]];
+                UIImageView *imgView = [[UIImageView alloc] initWithImage:[UIImage imageWithContentsOfFile:imagePath1]];
+                ALAssetsLibrary *library = [[ALAssetsLibrary alloc] init];
+                
+                [library writeImageToSavedPhotosAlbum:[imgView.image CGImage] orientation:(ALAssetOrientation)[imgView.image imageOrientation] completionBlock:^(NSURL *assetURL, NSError *error){
+                    if (error) {
+                        // TODO: error handling
+                    } else {
+                        // TODO: success handling
+                        NSLog(@"SUCCESS");
+                        
+                    }
+                }];
+                
+            }
+        }
+        [recordDB insertAtTable:COLLECT_TABLENAME Clos:collectClosArray];
         UIAlertView *alertV = [[UIAlertView alloc] initWithTitle:@"图片已经加入本地图库里" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [alertV show];
     }
-    
-    [recordDB insertAtTable:COLLECT_TABLENAME Clos:collectClosArray];
-    NSArray *resultItem = [recordDB resultSet:COLLECT_TABLENAME Order:nil LimitCount:0];
-    
-    for (CollectDBItem *item in resultItem) {
-        NSArray *img_array = [item.imgArr componentsSeparatedByString:@","];
-        NSDictionary *dic = [[NSDictionary alloc] initWithObjectsAndKeys:item.catid,@"id",item.thumb,@"image1",img_array,@"image_array", nil];
-        [myTempArray addObject:dic];
+    else
+    {
+        UIAlertView *alertV = [[UIAlertView alloc] initWithTitle:@"已在收藏夹中" message:nil delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        [alertV show];
     }
     
     
-//    WaterFallDetailViewController *waterVC = [[WaterFallDetailViewController alloc] init];
-//    waterVC.isCollect = YES;
-//    waterVC.urlArray = myTempArray;
-//    waterVC.offset_H = 0;
-//    [self.navigationController pushViewController:waterVC animated:YES];
+    NSArray *resultItem = [recordDB resultSet:COLLECT_TABLENAME Order:nil LimitCount:0];
     
-    
-    
-        CollectViewController *collectVC = [[CollectViewController alloc] init];
-        collectVC.imageArr = resultItem;
-        collectVC.categoryId = _cat_id;
-        [self.navigationController pushViewController:collectVC animated:YES];
+    CollectViewController *collectVC = [[CollectViewController alloc] init];
+    collectVC.imageArr = resultItem;
+    collectVC.categoryId = _cat_id;
+    [self.navigationController pushViewController:collectVC animated:YES];
     
     
     

@@ -10,8 +10,9 @@
 
 #import "EGORefreshTableHeaderView.h"
 #import "EGORefreshTableFooterView.h"
+#import "MBProgressHUD.h"
 @class RecordDao;
-@interface CollectViewController : UIViewController<EGORefreshTableDelegate>
+@interface CollectViewController : UIViewController<EGORefreshTableDelegate,MBProgressHUDDelegate,UIAlertViewDelegate>
 {
     //EGOHeader
     EGORefreshTableHeaderView *_refreshHeaderView;
@@ -19,6 +20,7 @@
     EGORefreshTableFooterView *_refreshFooterView;
     //
     RecordDao *recordDB;
+    MBProgressHUD *HUD;
     BOOL _reloading;
 }
 @property (nonatomic, retain) NSMutableArray *images;

@@ -7,7 +7,7 @@
 //
 
 #import "AboutViewController.h"
-
+#import "UIView+UIViewEx.h"
 @interface AboutViewController ()
 
 @end
@@ -40,11 +40,17 @@
     imageView.userInteractionEnabled = YES;
     [self.view addSubview:imageView];
     
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 30, 50, 30)];
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 20, 50, 50)];
     [backButton setTitle:@"返回" forState:UIControlStateNormal];
     [backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:backButton];
+    backButton.titleLabel.font = [UIFont systemFontOfSize:16.0];
+    BOOL ios7 = [[[UIDevice currentDevice]systemVersion]floatValue] >= 7.0 ? YES : NO;
+    if (!ios7) {
+        backButton.top = 0;
+    }
+    
 }
 
 - (void)back

@@ -129,6 +129,7 @@
         if (pageNum>[totalPage intValue]) {
             [self showWithTime:@"没有内容了"];
             TMQuiltView *qtmView = (TMQuiltView *)[mainScrollView viewWithTag:tempTag];
+            [qtmView reloadData];
             [self removeFooterView];
             [self testFinishedLoadData:qtmView];
             return;
@@ -243,8 +244,8 @@
 
 - (void)createTopView
 {
-    UIFont *font = [UIFont systemFontOfSize:14.0];
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 30, 50, 30)];
+    UIFont *font = [UIFont systemFontOfSize:16.0];
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 20, 50, 50)];
     [backButton setTitle:@"更多" forState:UIControlStateNormal];
     [backButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(more) forControlEvents:UIControlEventTouchUpInside];
@@ -258,7 +259,7 @@
     UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(titleLabel1.right-7, 25, 30, 30)];
     imgView.image = [UIImage imageNamed:@"logo.jpg"];
     
-    [self.view addSubview:imgView];
+    
     
     UILabel *titleLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(425+65-320, 30, 50, 30)];
     titleLabel2.text = @"助理";
@@ -269,7 +270,7 @@
     lineLabel.backgroundColor = [UIColor blackColor];
     [self.view addSubview:lineLabel];
     
-    UIButton *collectButton = [[UIButton alloc] initWithFrame:CGRectMake(320-70, 30, 60, 30)];
+    UIButton *collectButton = [[UIButton alloc] initWithFrame:CGRectMake(320-70, 20, 60, 50)];
     [collectButton setTitle:@"收藏" forState:UIControlStateNormal];
     [collectButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [collectButton addTarget:self action:@selector(collectTap) forControlEvents:UIControlEventTouchUpInside];
@@ -279,6 +280,14 @@
     titleLabel1.font = font;
     titleLabel2.font = font;
     collectButton.titleLabel.font = font;
+    BOOL ios7 = [[[UIDevice currentDevice]systemVersion]floatValue] >= 7.0 ? YES : NO;
+    if (!ios7) {
+        backButton.top = 0;
+        titleLabel1.top = 10;
+        titleLabel2.top = 10;
+        collectButton.top = 0;
+        imgView.top = 5;
+    }
     
     
     titleScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(5, lineLabel.top-33, 320-10, 33)];
@@ -310,7 +319,7 @@
     
     [self.view addSubview:titleLabel1];
     [self.view addSubview:titleLabel2];
-//    [self.view addSubview:imgView];
+    [self.view addSubview:imgView];
     
 }
 

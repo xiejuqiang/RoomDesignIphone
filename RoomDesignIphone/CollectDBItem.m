@@ -10,6 +10,7 @@
 
 @implementation CollectDBItem
 @synthesize catid;
+@synthesize offsetH;
 @synthesize thumb;
 @synthesize imgArr;
 //注意顺序要跟数据库字段创建顺序一致
@@ -17,8 +18,10 @@
 {
     
     self.catid = [dataArray objectAtIndex:0];
-    self.thumb = [dataArray objectAtIndex:1];
-    self.imgArr = [dataArray objectAtIndex:2];
+    self.offsetH = [dataArray objectAtIndex:1];
+    self.thumb = [dataArray objectAtIndex:2];
+    self.imgArr = [dataArray objectAtIndex:3];
+    self.titleName = [dataArray objectAtIndex:4];
 
 }
 

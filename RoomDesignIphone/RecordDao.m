@@ -16,7 +16,7 @@
 -(void)initArray
 {
     //对应自己数据库字段名 参考DBString.h
-    collectArray = [[NSArray alloc] initWithObjects:@"catID",@"imgURL",@"imgArr", nil];
+    collectArray = [[NSArray alloc] initWithObjects:@"catID",@"offsetH",@"imgURL",@"imgArr", @"titleName",nil];
     systemConfigArray = [[NSArray alloc] initWithObjects:@"cloKey",@"cloValue",@"sortNum",@"classN",@"note", nil];
     newsCategoryArray = [[NSArray alloc] initWithObjects:@"catID",@"catName",@"modelID", nil];
     newsListArray = [[NSArray alloc] initWithObjects:@"nId",@"catId",@"title",@"userName",@"userId",@"thumb",@"description", nil];
@@ -169,7 +169,7 @@
     {
         while ([rs next])
         {
-            returnArray = [[NSArray alloc]initWithObjects:[rs stringForColumn:[rs columnNameForIndex:0]],[rs stringForColumn:[rs columnNameForIndex:1]],[rs stringForColumn:[rs columnNameForIndex:2]],nil];
+            returnArray = [[NSArray alloc]initWithObjects:[rs stringForColumn:[rs columnNameForIndex:0]],[rs stringForColumn:[rs columnNameForIndex:1]],[rs stringForColumn:[rs columnNameForIndex:2]],[rs stringForColumn:[rs columnNameForIndex:3]],[rs stringForColumn:[rs columnNameForIndex:4]],nil];
             CollectDBItem *collectDBItem = [[CollectDBItem alloc]init];
             [collectDBItem initData:returnArray];
             [result addObject:collectDBItem];
