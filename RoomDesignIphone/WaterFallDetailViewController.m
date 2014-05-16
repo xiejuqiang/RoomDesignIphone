@@ -234,7 +234,7 @@
         imageViewBig.userInteractionEnabled = YES;
         imageViewBig.isUse = NO;
         imageViewBig.clipsToBounds = YES;
-        imageViewBig.contentMode = UIViewContentModeScaleAspectFill;
+        imageViewBig.contentMode = UIViewContentModeScaleAspectFit;
         imageViewBig.frame = CGRectMake(0, 10+(Screen_height-170)*j, 310, Screen_height-180);
         imageViewBig.imageURL = [[NSURL alloc] initWithString:[imgArr objectAtIndex:j]];
         [imgViewTempArray addObject:imageViewBig];

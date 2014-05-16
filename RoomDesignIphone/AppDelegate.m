@@ -15,7 +15,7 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
-    Appdate* appdate = [Appdate appdateWithAppleId:844768379];
+    Appdate* appdate = [Appdate appdateWithAppleId:875770345];
     appdate.delegate = self;
     
 #if NS_BLOCKS_AVAILABLE
